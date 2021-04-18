@@ -1,0 +1,596 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>proyecto_ia1_mmellimaci</title><meta name="generator" content="MATLAB 9.10"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2021-04-04"><meta name="DC.source" content="proyecto_ia1_mmellimaci.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">"Trabajo Final Inteligencia Artificial I &#8211; a&ntilde;o 2019"                 %</a></li><li><a href="#4">cargar_dataset                                                       %</a></li><li><a href="#7">cargar_foto_a_identificar                                            %</a></li><li><a href="#10">agrupar_con_kmeans                                                   %</a></li><li><a href="#13">clasificar_con_knn                                                   %</a></li></ul></div><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="2">"Trabajo Final Inteligencia Artificial I &#8211; a&ntilde;o 2019"                 %</h2><p>Marcelo E Mellimaci (Leg 10764)                                        %                                                                        % Sistema de clasificaci&oacute;n de piezas met&aacute;licas por visi&oacute;n artificial     % Agente que permite identificar tornillos, clavos, tuercas y arandelas  % Toma im&aacute;genes de las 4 categor&iacute;as por separado como una base de datos  % Se usan los m&eacute;todos K-means y K-nn para realizar la clasificaci&oacute;n      %</p><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% Antes de correr el script se eliminan variables globales y se</span>
+<span class="comment">% limpia la pantalla</span>
+clc, clear, close <span class="string">all</span>;
+
+<span class="comment">% Directorio d&oacute;nde se encuentran las im&aacute;genes '.jpg' de base de datos</span>
+ruta_dataset= uigetdir(<span class="string">""</span>, <span class="string">'Elija el directorio de las fotos del dataset:'</span>);
+cd(ruta_dataset);
+DataSet= imageDatastore(ruta_dataset, <span class="string">'FileExtensions'</span>, {<span class="string">'.jpg'</span>});
+N= length(dir(<span class="string">'*.jpg'</span>));
+
+<span class="comment">% Se va al directorio del proyecto para leer los fuentes de las funciones</span>
+cd(<span class="string">'/MATLAB Drive/MMellimaci/Proyecto_IA_1/'</span>);
+<span class="comment">% Se extraen caracter&iacute;sticas del dataset y se almacenan en dos arrays</span>
+[dataBase, categoria]= cargar_dataset(DataSet, N);
+<span class="comment">% Se muestra el diagrama de las caracter&iacute;sticas de las fotos del dataset</span>
+figure;
+plot(dataBase(1,:), dataBase(2,:), <span class="string">'.'</span>, <span class="string">'MarkerSize'</span>, 17);
+xlabel(<span class="string">'excentricidad'</span>);
+ylabel(<span class="string">'&aacute;rea'</span>);
+title(<span class="string">"Gr&aacute;fico de dispersi&oacute;n del dataset"</span>);
+
+<span class="comment">% Carga la fotograf&iacute;a de la pieza a clasificar</span>
+[FileName,PathName] = uigetfile(<span class="string">'*.jpg'</span>,<span class="string">'Elija la foto de la pieza a clasificar:'</span>);
+imagen= imread(strcat(PathName,FileName));
+caracts_foto= cargar_foto_a_identificar(imagen);
+<span class="comment">% Muestra las caracter&iacute;sticas extrat&iacute;das de la imagen a reconocer:</span>
+<span class="comment">% el &aacute;rea y la excentricidad de la forma redondeada</span>
+disp(<span class="string">'Excentricidad y &Aacute;rea de la imagen clasificada:'</span>);
+disp(caracts_foto');
+
+<span class="comment">% Se agrupa en 4 grupos el dataBase con las caracter&iacute;sticas de las fotos</span>
+tic;
+<span class="comment">% answer= inputdlg({'Ingrese el nro de iteraciones del m&eacute;todo K-means:'}, ...</span>
+<span class="comment">%     'N&uacute;mero de iteracs para K-means:', [1 40], {'7'});</span>
+<span class="comment">% iteraciones = str2double(answer{1});</span>
+iteraciones= 8
+agrupar_con_kmeans(dataBase, N, 4, iteraciones);
+disp(<span class="string">"Tiempo de ejecuci&oacute;n del algoritmo K-means:"</span>);
+disp(toc);
+
+<span class="comment">% Se identifica la categor&iacute;a de la foto a clasificar a trav&eacute;s de KNN</span>
+tic;
+<span class="comment">% En KNN el nro de vecinos 'k' NO debe ser un m&uacute;ltiplo de nro de categor&iacute;as</span>
+<span class="comment">% answer= inputdlg({'Ingrese el valor K de vecinos pr&oacute;ximos para K-nn:'}, ...</span>
+<span class="comment">%     'K vecinos para el m&eacute;todo K-nn:', [1 40], {'13'});</span>
+<span class="comment">% k_vecinos_proximos = str2double(answer{1});</span>
+k_vecinos_proximos= 7
+moda= clasificar_con_knn(dataBase, categoria, caracts_foto, k_vecinos_proximos);
+<span class="comment">% Se muestra el resultado de la categorizaci&oacute;n, adem&aacute;s de un mensaje de voz</span>
+disp(<span class="string">'La pieza clasificada es:'</span>);
+<span class="keyword">if</span> (moda == 1)
+    disp(<span class="string">'    una ARANDELA'</span>);
+    disp(<span class="string">"Tiempo de ejecuci&oacute;n del algoritmo K-NN:"</span>);
+    disp(toc);
+    f = msgbox(<span class="string">'La pieza clasificada es: una ARANDELA'</span>,<span class="string">'Arandela'</span>);
+    <span class="comment">% Se escucha la frase "La pieza clasificada es una arandela"</span>
+    [y, Fs] = audioread(<span class="string">'/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/arandela.wav'</span>);
+    player=audioplayer(y,Fs);
+    play(player);
+<span class="keyword">elseif</span>(moda == 2)
+    disp(<span class="string">'    un CLAVO'</span>);
+    disp(<span class="string">"Tiempo de ejecuci&oacute;n del algoritmo K-NN:"</span>);
+    disp(toc);
+    f = msgbox(<span class="string">'La pieza clasificada es: un CLAVO'</span>,<span class="string">'Clavo'</span>);
+    <span class="comment">% Se escucha la frase "La pieza clasificada es un clavo"</span>
+    [y, Fs] = audioread(<span class="string">'/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/clavo.wav'</span>);
+    player=audioplayer(y,Fs);
+    play(player);
+<span class="keyword">elseif</span>(moda == 3)
+    disp(<span class="string">'    un TORNILLO'</span>);
+    disp(<span class="string">"Tiempo de ejecuci&oacute;n del algoritmo K-NN:"</span>);
+    disp(toc);
+    f = msgbox(<span class="string">'La pieza clasificada es: un TORNILLO'</span>,<span class="string">'Tornillo'</span>);
+    <span class="comment">% Se escucha la frase "La pieza clasificada es un tornillo"</span>
+    [y, Fs] = audioread(<span class="string">'/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/tornillo.wav'</span>);
+    player=audioplayer(y,Fs);
+    play(player);
+<span class="keyword">elseif</span>(moda == 4)
+    disp(<span class="string">'    una TUERCA'</span>);
+    disp(<span class="string">"Tiempo de ejecuci&oacute;n del algoritmo K-NN:"</span>);
+    disp(toc);
+    f = msgbox(<span class="string">'La pieza clasificada es: una TUERCA'</span>,<span class="string">'Tuerca'</span>);
+    <span class="comment">% Se escucha la frase "La pieza clasificada es una tuerca"</span>
+    [y, Fs] = audioread(<span class="string">'/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/tuerca.wav'</span>);
+    player=audioplayer(y,Fs);
+    play(player);
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> [dataBase, categoria] = cargar_dataset(DataSet, N)
+</pre><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="4">cargar_dataset                                                       %</h2><p>Parametros de Entrada:                                                 %   DataSet - conjunto de im&aacute;genes (imageDatastore) del dataset          %   N - n&uacute;mero total de fotos en la base de datos                        % Parametros de Salida:                                                  %   dataBase - array [2xN] con caracter&iacute;sticas (excen, &aacute;rea) del dataset %   categoria - vector [1xN] con la categor&iacute;a (de 1 a 4) para cada foto  %</p><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+    dataBase= zeros(2, N);
+    categoria= zeros(1, N);
+    i= 1;
+    <span class="comment">%Los &iacute;ndices en Matlab/Octave empiezan en 1</span>
+    <span class="keyword">while</span> (hasdata(DataSet))
+        <span class="comment">% Carga las im&aacute;genes</span>
+        imagen= read(DataSet);
+        <span class="comment">% Separa el canal verde de cada imagen para eliminar el fondo</span>
+        greenChannel= imagen(:,:,2);
+        <span class="comment">% Se rellena el fondo del negativo de la imagen</span>
+        greenBackdrop= imcomplement(greenChannel);
+        lleno= imfill(greenBackdrop, <span class="string">'holes'</span>);
+        <span class="comment">% La imagen inversa se vuelve imagen binaria (monocrom&aacute;tica)</span>
+        BW= imbinarize(lleno);
+
+        <span class="comment">% Se extraen caracter&iacute;sticas de la imagen</span>
+        cc= regionprops(BW, <span class="string">'Eccentricity'</span>, <span class="string">'Area'</span>);
+        <span class="comment">% Mide la excentricidad de la forma redondeada y</span>
+        <span class="comment">% se guarda en la matriz con caracter&iacute;sticas</span>
+        dataBase(1,i)= cc.Eccentricity;
+
+        <span class="comment">% Se calcula el &aacute;rea de la regi&oacute;n y se registra dicha caracter&iacute;stica</span>
+        dataBase(2,i)= cc.Area;
+
+        <span class="comment">% Se clasifican las N fotos en 4 categor&iacute;as diferentes</span>
+        <span class="comment">%quedando N/4 fotograf&iacute;as en cada categor&iacute;a</span>
+        <span class="keyword">if</span> (i &lt;= N/4)
+            <span class="comment">% Arandelas</span>
+            categoria(1,i)=1;
+        <span class="keyword">elseif</span>(i&gt;N/4 &amp;&amp; i&lt;=2*N/4)
+            <span class="comment">% Clavos</span>
+            categoria(1,i)=2;
+        <span class="keyword">elseif</span>(i&gt;2*N/4 &amp;&amp; i&lt;=3*N/4)
+            <span class="comment">% Tornillos</span>
+            categoria(1,i)=3;
+        <span class="keyword">else</span>
+            <span class="comment">% Tuercas</span>
+            categoria(1,i)=4;
+        <span class="keyword">end</span>
+        <span class="comment">% Suma las posiciones para cada secci&oacute;n del arreglo</span>
+        i= i + 1;
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">function</span> caracts_foto = cargar_foto_a_identificar(imagen)
+</pre><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="7">cargar_foto_a_identificar                                            %</h2><p>Parametros de Entrada:                                                 %   imagen - foto de la pieza que se va a clasificar                     % Parametros de Salida:                                                  %   caracts_foto - array [2x1] con la excentricidad y el &aacute;rea de la fig  %</p><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+    <span class="comment">% Se extrae el canal verde de la imagen</span>
+    greenChannel= imagen(:,:,2);
+    <span class="comment">% Se extrae el canal verde para eliminar el fondo de dicho color</span>
+    figure;
+    imshow(greenChannel);
+    title(<span class="string">'Canal Verde'</span>);
+    <span class="comment">% Se rellena el fondo del negativo de la imagen</span>
+    greenBackdrop= imcomplement(greenChannel);
+    lleno= imfill(greenBackdrop, <span class="string">'holes'</span>);
+    figure;
+    imshow(lleno);
+    title(<span class="string">'Negativo sin huecos'</span>);
+
+    <span class="comment">% La imagen inversa se vuelve imagen binaria (monocrom&aacute;tica)</span>
+    BW= imbinarize(lleno);
+    <span class="comment">% Se muestra en la pantalla la imagen binaria</span>
+    figure;
+    imshow(BW);
+    title (<span class="string">'Imagen Monocrom&aacute;tica'</span>);
+
+    <span class="comment">% Se extraen caracter&iacute;sticas de la foto</span>
+    cc= regionprops(BW, <span class="string">'Eccentricity'</span>, <span class="string">'Area'</span>);
+    <span class="comment">% Mide la excentricidad de la forma circular y se</span>
+    <span class="comment">% guarda en el array con las caracter&iacute;sticas extra&iacute;das</span>
+    caracts_foto(1,1)= cc.Eccentricity;
+
+    <span class="comment">% Se calcula el &aacute;rea de la regi&oacute;n y se registra dicha caracter&iacute;stica</span>
+    caracts_foto(2,1)= cc.Area;
+</pre><img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_01.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_02.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_03.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">function</span> agrupar_con_kmeans(dataBase, N, K, iteraciones)
+</pre><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="10">agrupar_con_kmeans                                                   %</h2><p>Parametros de Entrada:                                                 %   dataBase - array [2xN] con caracter&iacute;sticas del dataset               %   N - n&uacute;mero total de fotos en la base de datos                        %   K - n&uacute;mero de categor&iacute;as &oacute; clasificaciones                           %   iteraciones - n&uacute;mero de iteraciones que realizar&aacute; el m&eacute;todo K-means  % Parametros de Salida:                                                  %   gr&aacute;ficas de dispersi&oacute;n del dataset con los centroides obtenidos      %</p><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+    X= dataBase';
+    <span class="comment">% Toma K centroides aleatorios</span>
+    indC= randperm(N, K);
+    <span class="keyword">for</span> i = 1 : iteraciones
+        ind= knnsearch(X(indC,:), X);
+        <span class="comment">% El centroide m&aacute;s cercano determina la categor&iacute;a de cada punto</span>
+        <span class="keyword">for</span> k = 1 : K
+            indk= ind == k;
+            meank= mean(X(indk,:));
+            indC(k)= knnsearch(X, meank);
+        <span class="keyword">end</span>
+        figure;
+        hold <span class="string">all</span>;
+        <span class="comment">% Se recalculan los centroides</span>
+        <span class="keyword">for</span> k = 1 : K
+            indk= find(ind == k);
+            <span class="comment">% Muestra el diagrama de dispersi&oacute;n de las caracter&iacute;sticas para</span>
+            <span class="comment">% cada iteraci&oacute;n</span>
+            plot(X(indk,1), X(indk,2), <span class="string">'.'</span>, <span class="string">'MarkerSize'</span>, 17);
+        <span class="keyword">end</span>
+        plot(X(indC,1), X(indC,2), <span class="string">'or'</span>, <span class="string">'MarkerSize'</span>,10, <span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+        xlabel(<span class="string">'excentricidad'</span>);
+        ylabel(<span class="string">'&aacute;rea'</span>);
+        title([<span class="string">'K-means Iteraci&oacute;n N&deg;'</span> num2str(i)]);
+        grid <span class="string">on</span>;
+    <span class="keyword">end</span>
+<span class="comment">% Deseo que la persona est&aacute; leyendo esto sea feliz y cumpla todos sus sue&ntilde;os</span>
+</pre><img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_04.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_05.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_06.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_07.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_08.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_09.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_10.png" alt=""> <img vspace="5" hspace="5" src="proyecto_ia1_mmellimaci_11.png" alt=""> <pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">function</span> moda = clasificar_con_knn(dataBase, categoria, caracts_foto, k_vecinos_proximos)
+</pre><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2 id="13">clasificar_con_knn                                                   %</h2><p>Parametros de Entrada:                                                 %   dataBase - array [2xN] de caracter&iacute;sticas (excent, &aacute;rea) del dataset %   categoria - vector [1xN] con la categor&iacute;a (de 1 a 4) de cada foto    %   caracts_foto - array [2x1] de caracter&iacute;sticas de la foto clasificada %   k_vecinos_proximos - nro de vecinos cercanos para clasificar c/punto % Parametros de Salida:                                                  %   moda - clase de la foto clasificada, que m&aacute;s se repite entre vecinos %</p><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+    <span class="comment">% Calcula la distancia euclidiana a cada uno de los puntos</span>
+    [xx,yy]=meshgrid(dataBase(1,:)-caracts_foto(1,1), dataBase(2,:)-caracts_foto(2,1));
+    distancia= sqrt(xx.*xx + yy.*yy);
+
+    <span class="comment">% Se ordenan las categor&iacute;as con la distancia desde cada punto</span>
+    [~,ix] = sort(diag(distancia));
+    categoria = categoria(ix);
+
+    <span class="comment">% El valor k NO debe ser un m&uacute;ltiplo de n&uacute;mero de categor&iacute;as</span>
+    <span class="comment">% (k): Cantidad de puntos vecinos cercanos</span>
+    <span class="keyword">for</span> i = 1 : k_vecinos_proximos
+        <span class="keyword">for</span> j = 1 : i
+            etiqueta= categoria(1:i);
+            moda= mode(etiqueta');
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeoutput">Excentricidad y &Aacute;rea de la imagen clasificada:
+    0.8660    2.0000
+
+
+iteraciones =
+
+     8
+
+Tiempo de ejecuci&oacute;n del algoritmo K-means:
+    9.5701
+
+
+k_vecinos_proximos =
+
+     7
+
+La pieza clasificada es:
+    una ARANDELA
+Tiempo de ejecuci&oacute;n del algoritmo K-NN:
+    0.0709
+
+Warning: Unable to play audio because no audio outputs were found. 
+Warning: Unable to play audio because no audio outputs were found. 
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2021a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  "Trabajo Final Inteligencia Artificial I – año 2019"                 %
+% Marcelo E Mellimaci (Leg 10764)                                        %
+%                                                                        %
+% Sistema de clasificación de piezas metálicas por visión artificial     %
+% Agente que permite identificar tornillos, clavos, tuercas y arandelas  %
+% Toma imágenes de las 4 categorías por separado como una base de datos  %
+% Se usan los métodos K-means y K-nn para realizar la clasificación      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Antes de correr el script se eliminan variables globales y se
+% limpia la pantalla
+clc, clear, close all;
+
+% Directorio dónde se encuentran las imágenes '.jpg' de base de datos
+ruta_dataset= uigetdir("", 'Elija el directorio de las fotos del dataset:');
+cd(ruta_dataset);
+DataSet= imageDatastore(ruta_dataset, 'FileExtensions', {'.jpg'});
+N= length(dir('*.jpg'));
+
+% Se va al directorio del proyecto para leer los fuentes de las funciones
+cd('/MATLAB Drive/MMellimaci/Proyecto_IA_1/');
+% Se extraen características del dataset y se almacenan en dos arrays
+[dataBase, categoria]= cargar_dataset(DataSet, N);
+% Se muestra el diagrama de las características de las fotos del dataset
+figure;
+plot(dataBase(1,:), dataBase(2,:), '.', 'MarkerSize', 17);
+xlabel('excentricidad');
+ylabel('área');
+title("Gráfico de dispersión del dataset");
+
+% Carga la fotografía de la pieza a clasificar
+[FileName,PathName] = uigetfile('*.jpg','Elija la foto de la pieza a clasificar:');
+imagen= imread(strcat(PathName,FileName));
+caracts_foto= cargar_foto_a_identificar(imagen);
+% Muestra las características extratídas de la imagen a reconocer: 
+% el área y la excentricidad de la forma redondeada 
+disp('Excentricidad y Área de la imagen clasificada:');
+disp(caracts_foto');
+
+% Se agrupa en 4 grupos el dataBase con las características de las fotos
+tic;
+% answer= inputdlg({'Ingrese el nro de iteraciones del método K-means:'}, ...
+%     'Número de iteracs para K-means:', [1 40], {'7'});
+% iteraciones = str2double(answer{1});
+iteraciones= 8
+agrupar_con_kmeans(dataBase, N, 4, iteraciones);
+disp("Tiempo de ejecución del algoritmo K-means:");
+disp(toc);
+
+% Se identifica la categoría de la foto a clasificar a través de KNN
+tic;
+% En KNN el nro de vecinos 'k' NO debe ser un múltiplo de nro de categorías
+% answer= inputdlg({'Ingrese el valor K de vecinos próximos para K-nn:'}, ...
+%     'K vecinos para el método K-nn:', [1 40], {'13'});
+% k_vecinos_proximos = str2double(answer{1});
+k_vecinos_proximos= 7
+moda= clasificar_con_knn(dataBase, categoria, caracts_foto, k_vecinos_proximos);
+% Se muestra el resultado de la categorización, además de un mensaje de voz
+disp('La pieza clasificada es:');
+if (moda == 1)
+    disp('    una ARANDELA');
+    disp("Tiempo de ejecución del algoritmo K-NN:");
+    disp(toc);
+    f = msgbox('La pieza clasificada es: una ARANDELA','Arandela');
+    % Se escucha la frase "La pieza clasificada es una arandela"
+    [y, Fs] = audioread('/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/arandela.wav');
+    player=audioplayer(y,Fs);
+    play(player);
+elseif(moda == 2)
+    disp('    un CLAVO');
+    disp("Tiempo de ejecución del algoritmo K-NN:");
+    disp(toc);
+    f = msgbox('La pieza clasificada es: un CLAVO','Clavo');
+    % Se escucha la frase "La pieza clasificada es un clavo"
+    [y, Fs] = audioread('/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/clavo.wav');
+    player=audioplayer(y,Fs);
+    play(player);
+elseif(moda == 3)
+    disp('    un TORNILLO');
+    disp("Tiempo de ejecución del algoritmo K-NN:");
+    disp(toc);
+    f = msgbox('La pieza clasificada es: un TORNILLO','Tornillo');
+    % Se escucha la frase "La pieza clasificada es un tornillo"
+    [y, Fs] = audioread('/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/tornillo.wav');
+    player=audioplayer(y,Fs);
+    play(player);
+elseif(moda == 4)
+    disp('    una TUERCA');
+    disp("Tiempo de ejecución del algoritmo K-NN:");
+    disp(toc);
+    f = msgbox('La pieza clasificada es: una TUERCA','Tuerca');
+    % Se escucha la frase "La pieza clasificada es una tuerca"
+    [y, Fs] = audioread('/MATLAB Drive/MMellimaci/Proyecto_IA_1/voces/tuerca.wav');
+    player=audioplayer(y,Fs);
+    play(player);
+end
+
+
+function [dataBase, categoria] = cargar_dataset(DataSet, N)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  cargar_dataset                                                       %
+% Parametros de Entrada:                                                 %
+%   DataSet - conjunto de imágenes (imageDatastore) del dataset          %
+%   N - número total de fotos en la base de datos                        %
+% Parametros de Salida:                                                  %
+%   dataBase - array [2xN] con características (excen, área) del dataset %
+%   categoria - vector [1xN] con la categoría (de 1 a 4) para cada foto  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    dataBase= zeros(2, N);
+    categoria= zeros(1, N);
+    i= 1;
+    %Los índices en Matlab/Octave empiezan en 1
+    while (hasdata(DataSet))
+        % Carga las imágenes
+        imagen= read(DataSet);
+        % Separa el canal verde de cada imagen para eliminar el fondo
+        greenChannel= imagen(:,:,2);
+        % Se rellena el fondo del negativo de la imagen
+        greenBackdrop= imcomplement(greenChannel);
+        lleno= imfill(greenBackdrop, 'holes');
+        % La imagen inversa se vuelve imagen binaria (monocromática)
+        BW= imbinarize(lleno);
+        
+        % Se extraen características de la imagen
+        cc= regionprops(BW, 'Eccentricity', 'Area');
+        % Mide la excentricidad de la forma redondeada y
+        % se guarda en la matriz con características
+        dataBase(1,i)= cc.Eccentricity;
+        
+        % Se calcula el área de la región y se registra dicha característica
+        dataBase(2,i)= cc.Area;
+        
+        % Se clasifican las N fotos en 4 categorías diferentes
+        %quedando N/4 fotografías en cada categoría
+        if (i <= N/4)
+            % Arandelas
+            categoria(1,i)=1;
+        elseif(i>N/4 && i<=2*N/4)
+            % Clavos
+            categoria(1,i)=2;
+        elseif(i>2*N/4 && i<=3*N/4)
+            % Tornillos
+            categoria(1,i)=3;
+        else
+            % Tuercas
+            categoria(1,i)=4;      
+        end
+        % Suma las posiciones para cada sección del arreglo
+        i= i + 1;
+    end
+    
+end
+
+
+function caracts_foto = cargar_foto_a_identificar(imagen)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  cargar_foto_a_identificar                                            %
+% Parametros de Entrada:                                                 %
+%   imagen - foto de la pieza que se va a clasificar                     %
+% Parametros de Salida:                                                  %
+%   caracts_foto - array [2x1] con la excentricidad y el área de la fig  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Se extrae el canal verde de la imagen
+    greenChannel= imagen(:,:,2);
+    % Se extrae el canal verde para eliminar el fondo de dicho color
+    figure;
+    imshow(greenChannel);
+    title('Canal Verde');
+    % Se rellena el fondo del negativo de la imagen
+    greenBackdrop= imcomplement(greenChannel);
+    lleno= imfill(greenBackdrop, 'holes');
+    figure;
+    imshow(lleno);
+    title('Negativo sin huecos');
+    
+    % La imagen inversa se vuelve imagen binaria (monocromática)
+    BW= imbinarize(lleno);
+    % Se muestra en la pantalla la imagen binaria
+    figure;
+    imshow(BW); 
+    title ('Imagen Monocromática');
+    
+    % Se extraen características de la foto
+    cc= regionprops(BW, 'Eccentricity', 'Area');
+    % Mide la excentricidad de la forma circular y se
+    % guarda en el array con las características extraídas
+    caracts_foto(1,1)= cc.Eccentricity;
+    
+    % Se calcula el área de la región y se registra dicha característica
+    caracts_foto(2,1)= cc.Area;
+    
+end
+
+
+function agrupar_con_kmeans(dataBase, N, K, iteraciones)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  agrupar_con_kmeans                                                   %
+% Parametros de Entrada:                                                 %
+%   dataBase - array [2xN] con características del dataset               %
+%   N - número total de fotos en la base de datos                        %
+%   K - número de categorías ó clasificaciones                           %
+%   iteraciones - número de iteraciones que realizará el método K-means  %
+% Parametros de Salida:                                                  %
+%   gráficas de dispersión del dataset con los centroides obtenidos      %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    X= dataBase';
+    % Toma K centroides aleatorios
+    indC= randperm(N, K);
+    for i = 1 : iteraciones
+        ind= knnsearch(X(indC,:), X);
+        % El centroide más cercano determina la categoría de cada punto
+        for k = 1 : K
+            indk= ind == k;
+            meank= mean(X(indk,:));
+            indC(k)= knnsearch(X, meank);
+        end
+        figure;
+        hold all;
+        % Se recalculan los centroides
+        for k = 1 : K
+            indk= find(ind == k);
+            % Muestra el diagrama de dispersión de las características para
+            % cada iteración
+            plot(X(indk,1), X(indk,2), '.', 'MarkerSize', 17);
+        end
+        plot(X(indC,1), X(indC,2), 'or', 'MarkerSize',10, 'MarkerFaceColor','r');
+        xlabel('excentricidad');
+        ylabel('área');
+        title(['K-means Iteración N°' num2str(i)]);
+        grid on;
+    end
+% Deseo que la persona está leyendo esto sea feliz y cumpla todos sus sueños
+end
+
+
+function moda = clasificar_con_knn(dataBase, categoria, caracts_foto, k_vecinos_proximos)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  clasificar_con_knn                                                   %
+% Parametros de Entrada:                                                 %
+%   dataBase - array [2xN] de características (excent, área) del dataset %
+%   categoria - vector [1xN] con la categoría (de 1 a 4) de cada foto    %
+%   caracts_foto - array [2x1] de características de la foto clasificada %
+%   k_vecinos_proximos - nro de vecinos cercanos para clasificar c/punto %
+% Parametros de Salida:                                                  %
+%   moda - clase de la foto clasificada, que más se repite entre vecinos %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Calcula la distancia euclidiana a cada uno de los puntos
+    [xx,yy]=meshgrid(dataBase(1,:)-caracts_foto(1,1), dataBase(2,:)-caracts_foto(2,1));
+    distancia= sqrt(xx.*xx + yy.*yy);
+    
+    % Se ordenan las categorías con la distancia desde cada punto
+    [~,ix] = sort(diag(distancia));
+    categoria = categoria(ix);
+    
+    % El valor k NO debe ser un múltiplo de número de categorías
+    % (k): Cantidad de puntos vecinos cercanos 
+    for i = 1 : k_vecinos_proximos
+        for j = 1 : i
+            etiqueta= categoria(1:i);
+            moda= mode(etiqueta');
+        end
+    end
+    
+end
+##### SOURCE END #####
+--></body></html>
