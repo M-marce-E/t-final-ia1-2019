@@ -1,2 +1,2 @@
 TODO:
-Se podría llegar a mejorar la exactitud de la fidelidad de la clasificación analizando también una tercer propiedad ('Circularity' vendría bien para eso)
+Se podría llegar a mejorar la fidelidad de la clasificación analizando también una tercer propiedad ('Circularity' vendría bien para eso)
