@@ -1,0 +1,1 @@
+Se podría llegar a mejorar la exactitud de la fidelidad de la clasificación analizando también una tercer propiedad ('Circularity' vendría bien para eso)
